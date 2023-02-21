@@ -29,11 +29,11 @@ Command exec_cmd(string cmd, const string &selected_file)
 {
    vector<string> tokens{ split(cmd, " ") };
 
-   if (tokens[0] == "q")
+   if (tokens[0] == "q" or tokens[0] == "quit" or tokens[0] == "exit")
    {
       return Command::Quit;
    }
-   else if (tokens[0] == "rm")
+   else if (tokens[0] == "rm" or tokens[0] == "remove")
    {
       fs::remove_all(selected_file);
       return Command::DeleteFile;
@@ -58,6 +58,14 @@ std::string cmd_loop(WINDOW *cmd_win)
       if (input == '\n')
       {
          break;
+      }
+      else if (input == KEY_BACKSPACE && s.size() > 0)
+      {
+         // Move left
+         wmove(cmd_win, getcury(cmd_win), getcurx(cmd_win) - 1);
+         wdelch(cmd_win);
+         s.pop_back();
+         wrefresh(cmd_win);
       }
       else if ((isalpha(input) || input == ' '))
       {
