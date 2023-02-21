@@ -1,5 +1,5 @@
 # tfm
-Terminal file manager in C++17 (and ncurses).
+Terminal file manager in C++20 (and ncurses).
 # Dependenies
 - [cmake](https://cmake.org)
 - [ncurses](https://invisible-island.net/ncurses)

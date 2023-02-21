@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -28,6 +29,16 @@ struct FileItem
    FileType type;
    FileItem(const string &n, const FileType ft) : name{ n }, type{ ft }
    {
+   }
+   // For std::sort()
+   bool operator<(const FileItem &other)
+   {
+      // Dot file are last
+      if (name[0] == '.' && other.name[0] != '.')
+         return false;
+      if (other.name[0] == '.' && name[0] != '.')
+         return true;
+      return name < other.name;
    }
 };
 
@@ -60,12 +71,13 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
       v.emplace_back(fi);
    }
    fs::current_path(cwd);
+   std::sort(v.begin(), v.end());
    return Err::None;
 }
 
 void print_dir_content(const vector<FileItem> &v, WINDOW *win, const int selected = -1, const int begin = 0)
 {
-   size_t i = (size_t) begin;
+   size_t i = (size_t)begin;
    size_t maxy = (size_t)getmaxy(win);
    for (; i < v.size() && i - (size_t)begin < maxy; ++i)
    {
