@@ -5,6 +5,7 @@
 #include "./file_manager.hpp"
 #include "./fs_utils.hpp"
 #include "./ncurses_app.hpp"
+#include "./cmd_loop.hpp"
 
 namespace fs = std::filesystem;
 
@@ -28,14 +29,14 @@ int main()
    while (true)
    {
       Err prev_dir_e = get_dir_content(prev_dir_files, "..");
-      Err e = get_dir_content(dir_content);
+      Err err = get_dir_content(dir_content);
 
       if (prev_dir_e == Err::PermissionDenied)
          wprintw(fm.prev_win.getwin(), "Permission denied");
       else
          print_dir_content(prev_dir_files, fm.prev_win.getwin());
 
-      if (e == Err::PermissionDenied)
+      if (err == Err::PermissionDenied)
          wprintw(fm.cwd_win.getwin(), "Permission denied");
       else
          print_dir_content(dir_content, fm.cwd_win.getwin(), selected, begin);
@@ -49,6 +50,26 @@ int main()
       {
          break;
       }
+      else if (input == ':')
+      {
+         // Erase anything that might be in the cmd_win
+         werase(fm.cmd_win.getwin());
+         // Display the prompt
+         wprintw(fm.cmd_win.getwin(), ": ");
+         wrefresh(fm.cmd_win.getwin());
+         // Get input
+         std::string cmd_str = cmd_loop(fm.cmd_win.getwin());
+         // Execute
+         Command cmd = exec_cmd(cmd_str, dir_content[(size_t)selected].name);
+         fm.erase_fm();
+         // Display err if necessary
+         if (cmd == Command::Quit)
+            break;
+         else if (cmd == Command::MissingArgs)
+            fm.display_err("Arguments missing");
+         else if (cmd == Command::Unknown)
+            fm.display_err("Unknown command");
+      }
       else if (input == KEY_RESIZE)
       {
          fm.resize(stdscr);
@@ -56,11 +77,11 @@ int main()
       else if (input == KEY_RIGHT)
       {
          fm.erase_fm();
-         if (dir_content[selected].type == FileType::Directory)
+         if (dir_content[(size_t)selected].type == FileType::Directory)
          {
             try
             {
-               fs::current_path(dir_content[selected].name);
+               fs::current_path(dir_content[(size_t)selected].name);
                selected = 0;
             }
             catch (fs::filesystem_error &e)
@@ -99,10 +120,6 @@ int main()
             if (selected - begin < 0)
                --begin;
          }
-      }
-      else if (input == ':')
-      {
-         wprintw(fm.cmd_win.getwin(), ": ");
       }
       else
       {

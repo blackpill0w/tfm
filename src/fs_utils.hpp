@@ -11,12 +11,12 @@ using std::string;
 using std::vector;
 namespace fs = std::filesystem;
 
-enum Err
+enum class Err
 {
    None,
    PermissionDenied
 };
-enum FileType
+enum class FileType
 {
    Unknown,
    File,
