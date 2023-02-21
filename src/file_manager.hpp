@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <ncurses.h>
 
 #include "./ncurses_win.hpp"
@@ -28,6 +29,14 @@ public:
       cwd_win.set(container, maxy - 2, maxx / 3, 1, maxx / 3);
       content_win.set(container, maxy - 2, maxx / 3, 1, 2 * maxx / 3);
       cmd_win.set(container, 1, maxx, maxy - 1, 0);
+   }
+   void display_err(const std::string &err)
+   {
+      wattron(cmd_win.getwin(), COLOR_PAIR(3) | A_BOLD);
+      cmd_win.erase_win();
+      wprintw(cmd_win.getwin(), "%s", err.c_str());
+      cmd_win.refresh_win();
+      wattroff(cmd_win.getwin(), COLOR_PAIR(3) | A_BOLD);
    }
    void refresh_fm()
    {
