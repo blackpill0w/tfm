@@ -19,7 +19,7 @@ enum class Err
 enum class FileType
 {
    Unknown,
-   File,
+   RegularFile,
    Directory,
    Link
 };
@@ -27,7 +27,7 @@ struct FileItem
 {
    string name;
    FileType type;
-   FileItem(const string &n, const FileType ft) : name{ n }, type{ ft }
+   FileItem(const string &n, const FileType ft) : name{n}, type{ft}
    {
    }
    // For std::sort()
@@ -50,7 +50,7 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
    */
    v.clear();
 
-   auto cwd{ fs::current_path() };
+   auto cwd{fs::current_path()};
    try
    {
       fs::current_path(cwd / path);
@@ -59,11 +59,11 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
    {
       return Err::PermissionDenied;
    }
-   for (const auto &dir_entry : fs::directory_iterator{ "." })
+   for (const auto &dir_entry : fs::directory_iterator{"."})
    {
-      FileItem fi{ dir_entry.path().filename(), FileType::Unknown };
+      FileItem fi{dir_entry.path().filename(), FileType::Unknown};
       if (dir_entry.is_regular_file())
-         fi.type = FileType::File;
+         fi.type = FileType::RegularFile;
       else if (dir_entry.is_directory())
          fi.type = FileType::Directory;
       else if (dir_entry.is_symlink())
@@ -77,11 +77,11 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
 
 void print_dir_content(const vector<FileItem> &v, WINDOW *win, const int selected = -1, const int begin = 0)
 {
-   size_t i = (size_t)begin;
+   size_t i = size_t(begin);
    size_t maxy = (size_t)getmaxy(win);
-   for (; i < v.size() && i - (size_t)begin < maxy; ++i)
+   for (; i < v.size() && i - size_t(begin) < maxy; ++i)
    {
-      if (i == (size_t)selected)
+      if (i == size_t(selected))
          wattron(win, A_REVERSE);
       if (v[i].type == FileType::Directory)
          wattron(win, COLOR_PAIR(1) | A_BOLD);

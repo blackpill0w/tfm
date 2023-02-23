@@ -17,17 +17,21 @@ enum class Command
 {
    DeleteFile,
    RenameFile,
-   Quit,
    Unknown,
-   MissingArgs
+   MissingArgs,
+   None,
+   Quit
 };
 
 /**
  * Pareses input, executes the command, and returns the command executed (see enum Command).
  */
+ #include <fstream>
 Command exec_cmd(string cmd, const string &selected_file)
 {
    vector<string> tokens{ split(cmd, " ") };
+   if (tokens.size() == 1 && tokens[0] == "")
+      return Command::None;
 
    if (tokens[0] == "q" or tokens[0] == "quit" or tokens[0] == "exit")
    {
@@ -51,10 +55,13 @@ Command exec_cmd(string cmd, const string &selected_file)
 
 std::string cmd_loop(WINDOW *cmd_win)
 {
+   constexpr int ESC_KEY = 27;
    std::string s{};
    while (true)
    {
       const int input = getch();
+      if (input == ESC_KEY)
+         return "";
       if (input == '\n')
       {
          break;

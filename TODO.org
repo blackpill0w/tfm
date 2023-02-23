@@ -1,0 +1,4 @@
+#+title: Todo
+
+* DONE Show content
+* TODO Show owner & permissions & time of last change
