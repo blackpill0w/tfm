@@ -57,10 +57,14 @@ int main()
       else if (dir_files[size_t(selected)].type == FileType::RegularFile)
       {
          std::ifstream file{dir_files[size_t(selected)].name};
-         string line{};
-
-         while (std::getline(file, line))
-            wprintw(fm.content_win.getwin(), "%s\n", line.c_str());
+         if (file.rdstate() == std::ios_base::failbit)
+            fm.display_err("Couldn't read the file");
+         else
+         {
+            string line{};
+            while (std::getline(file, line))
+               wprintw(fm.content_win.getwin(), "%s\n", line.c_str());
+         }
       }
 
       refresh();
