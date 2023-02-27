@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <ncurses.h>
+#include <string>
 
 #include "./ncurses_win.hpp"
 
@@ -15,11 +15,11 @@ public:
    NcursesWin cmd_win{};
 
 public:
-   FileManager(WINDOW *container)
+   FileManager(WINDOW* container)
    {
       resize(container);
    }
-   void resize(WINDOW *container)
+   void resize(WINDOW* container)
    {
       int maxy, maxx;
       getmaxyx(container, maxy, maxx);
@@ -30,7 +30,7 @@ public:
       content_win.set(container, maxy - 2, maxx / 3, 1, 2 * maxx / 3);
       cmd_win.set(container, 1, maxx, maxy - 1, 0);
    }
-   void display_err(const std::string &err)
+   void display_err(const std::string& err)
    {
       wattron(cmd_win.getwin(), COLOR_PAIR(3) | A_BOLD);
       cmd_win.erase_win();

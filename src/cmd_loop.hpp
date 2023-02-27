@@ -26,8 +26,8 @@ enum class Command
 /**
  * Pareses input, executes the command, and returns the command executed (see enum Command).
  */
- #include <fstream>
-Command exec_cmd(string cmd, const string &selected_file)
+#include <fstream>
+Command exec_cmd(string cmd, const string& selected_file)
 {
    vector<string> tokens{ split(cmd, " ") };
    if (tokens.size() == 1 && tokens[0] == "")
@@ -53,10 +53,10 @@ Command exec_cmd(string cmd, const string &selected_file)
    return Command::Unknown;
 }
 
-std::string cmd_loop(WINDOW *cmd_win)
+std::string cmd_loop(WINDOW* cmd_win)
 {
    constexpr int ESC_KEY = 27;
-   std::string s{};
+   std::string   s{};
    while (true)
    {
       const int input = getch();

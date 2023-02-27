@@ -20,14 +20,14 @@ int main()
    init_pair(2, COLOR_GREEN, 0); // color for links
    init_pair(3, COLOR_RED, 0);   // color for errors
 
-   FileManager fm{stdscr};
+   FileManager fm{ stdscr };
    // Vectors to hold the content of the previous, current and selected directory
    vector<FileItem> prev_dir_files{};
    vector<FileItem> dir_files{};
    vector<FileItem> selected_dir_files{};
 
    int selected = 0;
-   int begin = 0;
+   int begin    = 0;
 
    while (true)
    {
@@ -56,7 +56,7 @@ int main()
       }
       else if (dir_files[size_t(selected)].type == FileType::RegularFile)
       {
-         std::ifstream file{dir_files[size_t(selected)].name};
+         std::ifstream file{ dir_files[size_t(selected)].name };
          if (file.rdstate() == std::ios_base::failbit)
             fm.display_err("Couldn't read the file");
          else
@@ -105,7 +105,7 @@ int main()
                fs::current_path(dir_files[size_t(selected)].name);
                selected = 0;
             }
-            catch (fs::filesystem_error &e)
+            catch (fs::filesystem_error& e)
             {
                fm.display_err("Error: Permission denied");
             }

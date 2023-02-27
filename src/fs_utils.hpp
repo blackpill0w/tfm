@@ -25,13 +25,13 @@ enum class FileType
 };
 struct FileItem
 {
-   string name;
+   string   name;
    FileType type;
-   FileItem(const string &n, const FileType ft) : name{n}, type{ft}
+   FileItem(const string& n, const FileType ft) : name{ n }, type{ ft }
    {
    }
    // For std::sort()
-   bool operator<(const FileItem &other)
+   bool operator<(const FileItem& other)
    {
       // Dot file are last
       if (name[0] == '.' && other.name[0] != '.')
@@ -42,7 +42,7 @@ struct FileItem
    }
 };
 
-Err get_dir_content(vector<FileItem> &v, string path = ".")
+Err get_dir_content(vector<FileItem>& v, string path = ".")
 {
    /*
    ** Clear the vector, then go to the path,
@@ -50,18 +50,18 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
    */
    v.clear();
 
-   auto cwd{fs::current_path()};
+   auto cwd{ fs::current_path() };
    try
    {
       fs::current_path(cwd / path);
    }
-   catch (fs::filesystem_error &e)
+   catch (fs::filesystem_error& e)
    {
       return Err::PermissionDenied;
    }
-   for (const auto &dir_entry : fs::directory_iterator{"."})
+   for (const auto& dir_entry : fs::directory_iterator{ "." })
    {
-      FileItem fi{dir_entry.path().filename(), FileType::Unknown};
+      FileItem fi{ dir_entry.path().filename(), FileType::Unknown };
       if (dir_entry.is_regular_file())
          fi.type = FileType::RegularFile;
       else if (dir_entry.is_directory())
@@ -75,9 +75,10 @@ Err get_dir_content(vector<FileItem> &v, string path = ".")
    return Err::None;
 }
 
-void print_dir_content(const vector<FileItem> &v, WINDOW *win, const int selected = -1, const int begin = 0)
+void print_dir_content(const vector<FileItem>& v, WINDOW* win, const int selected = -1,
+                       const int begin = 0)
 {
-   size_t i = size_t(begin);
+   size_t i    = size_t(begin);
    size_t maxy = (size_t)getmaxy(win);
    for (; i < v.size() && i - size_t(begin) < maxy; ++i)
    {

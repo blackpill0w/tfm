@@ -5,17 +5,17 @@
 struct NcursesWin
 {
 public:
-   WINDOW *win;
+   WINDOW* win;
 
 public:
    NcursesWin() : win{ nullptr }
    {
    }
-   NcursesWin(WINDOW *parent, int nlines, int ncols, int beginy, int beginx)
+   NcursesWin(WINDOW* parent, int nlines, int ncols, int beginy, int beginx)
    {
       win = subwin(parent, nlines, ncols, beginy, beginx);
    }
-   void set(WINDOW *parent, int nlines, int ncols, int beginy, int beginx)
+   void set(WINDOW* parent, int nlines, int ncols, int beginy, int beginx)
    {
       destroy();
       win = subwin(parent, nlines, ncols, beginy, beginx);
@@ -29,7 +29,7 @@ public:
    {
       destroy();
    }
-   WINDOW *getwin()
+   WINDOW* getwin()
    {
       return win;
    }
