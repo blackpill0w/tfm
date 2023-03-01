@@ -6,10 +6,10 @@
 
 #include <ncurses.h>
 
+#include "./str_utils.hpp"
+
 using std::string;
 using std::vector;
-
-#include "./str_utils.hpp"
 
 namespace fs = std::filesystem;
 
@@ -17,17 +17,22 @@ enum class Command
 {
    DeleteFile,
    RenameFile,
+   Quit,
+   None,
    Unknown,
    MissingArgs,
-   None,
-   Quit
+   PermissionDenied
 };
 
 /**
- * Pareses input, executes the command, and returns the command executed (see enum Command).
+ * Parses input, executes the command, and returns the command executed
+ * or the type of error if there was any (see enum Command).
+ * Supported commands:
+ *  - q, quit, exit: exit the program
+ *  - rm, remove: delete the selected file/directory
+ *  - rename NEW_NAME: rename the selected file/directory to NEW_NAME
  */
-#include <fstream>
-Command exec_cmd(string cmd, const string& selected_file)
+Command exec_cmd(const string cmd, const string& selected_file)
 {
    vector<string> tokens{ split(cmd, " ") };
    if (tokens.size() == 1 && tokens[0] == "")
@@ -39,7 +44,14 @@ Command exec_cmd(string cmd, const string& selected_file)
    }
    else if (tokens[0] == "rm" or tokens[0] == "remove")
    {
-      fs::remove_all(selected_file);
+      try
+      {
+         fs::remove_all(selected_file);
+      }
+      catch (fs::filesystem_error& e)
+      {
+         return Command::PermissionDenied;
+      }
       return Command::DeleteFile;
    }
    else if (tokens[0] == "rename")
@@ -47,7 +59,16 @@ Command exec_cmd(string cmd, const string& selected_file)
       if (tokens.size() < 2)
          return Command::MissingArgs;
       else
-         fs::rename(selected_file, tokens[1]);
+      {
+         try
+         {
+            fs::rename(selected_file, tokens[1]);
+         }
+         catch (fs::filesystem_error& e)
+         {
+            return Command::PermissionDenied;
+         }
+      }
       return Command::RenameFile;
    }
    return Command::Unknown;

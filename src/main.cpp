@@ -94,6 +94,8 @@ int main()
             break;
          else if (cmd == Command::MissingArgs)
             fm.display_err("Missing arguments");
+         else if (cmd == Command::PermissionDenied)
+            fm.display_err("Permission Denied");
          else if (cmd == Command::Unknown)
             fm.display_err("Unknown command");
       }
@@ -108,7 +110,7 @@ int main()
             {
                fs::current_path(dir_files[size_t(selected)].name);
                selected = 0;
-               begin = 0;
+               begin    = 0;
             }
             catch (fs::filesystem_error& e)
             {
@@ -125,7 +127,7 @@ int main()
          fm.erase_fm();
          fs::current_path("..");
          selected = 0;
-         begin = 0;
+         begin    = 0;
       }
       else if (input == KEY_DOWN)
       {

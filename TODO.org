@@ -1,5 +1,5 @@
 #+title: Todo
 
 * DONE Show content
-* TODO Commands' exceptions are not handled
+* DONE Commands' exceptions are not handled
 * TODO Show owner & permissions & time of last change
