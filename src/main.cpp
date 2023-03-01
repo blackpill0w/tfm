@@ -50,7 +50,11 @@ int main()
       {
          Err selected_err = get_dir_content(selected_dir_files, dir_files[size_t(selected)].name);
          if (selected_err == Err::PermissionDenied)
+         {
+            wattron(fm.content_win.getwin(), COLOR_PAIR(3));
             wprintw(fm.content_win.getwin(), "Permission denied");
+            wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
+         }
          else
             print_dir_content(selected_dir_files, fm.content_win.getwin());
       }
@@ -104,6 +108,7 @@ int main()
             {
                fs::current_path(dir_files[size_t(selected)].name);
                selected = 0;
+               begin = 0;
             }
             catch (fs::filesystem_error& e)
             {
@@ -120,6 +125,7 @@ int main()
          fm.erase_fm();
          fs::current_path("..");
          selected = 0;
+         begin = 0;
       }
       else if (input == KEY_DOWN)
       {

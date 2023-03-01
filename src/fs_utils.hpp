@@ -14,7 +14,7 @@ namespace fs = std::filesystem;
 enum class Err
 {
    None,
-   PermissionDenied
+   PermissionDenied,
 };
 enum class FileType
 {
@@ -33,7 +33,7 @@ struct FileItem
    // For std::sort()
    bool operator<(const FileItem& other)
    {
-      // Dot file are last
+      // Dot file go last
       if (name[0] == '.' && other.name[0] != '.')
          return false;
       if (other.name[0] == '.' && name[0] != '.')
@@ -59,16 +59,26 @@ Err get_dir_content(vector<FileItem>& v, string path = ".")
    {
       return Err::PermissionDenied;
    }
-   for (const auto& dir_entry : fs::directory_iterator{ "." })
+
+   fs::directory_iterator iterator = fs::directory_iterator{ "." };
+   try
    {
-      FileItem fi{ dir_entry.path().filename(), FileType::Unknown };
-      if (dir_entry.is_regular_file())
-         fi.type = FileType::RegularFile;
-      else if (dir_entry.is_directory())
-         fi.type = FileType::Directory;
-      else if (dir_entry.is_symlink())
-         fi.type = FileType::Link;
-      v.emplace_back(fi);
+      for (const auto& dir_entry : iterator)
+      {
+         FileItem fi{ dir_entry.path().filename(), FileType::Unknown };
+         if (dir_entry.is_regular_file())
+            fi.type = FileType::RegularFile;
+         else if (dir_entry.is_directory())
+            fi.type = FileType::Directory;
+         else if (dir_entry.is_symlink())
+            fi.type = FileType::Link;
+         v.emplace_back(fi);
+      }
+   }
+   catch (fs::filesystem_error& e)
+   {
+      fs::current_path(cwd);
+      return Err::PermissionDenied;
    }
    fs::current_path(cwd);
    std::sort(v.begin(), v.end());
