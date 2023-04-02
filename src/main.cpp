@@ -46,13 +46,24 @@ int main()
          print_dir_content(dir_files, fm.cwd_win.getwin(), selected, begin);
 
       // Get content of selected directory or file
-      if (dir_files[size_t(selected)].type == FileType::Directory)
+      if (dir_files.size() == 0)
+      {
+            wattron(fm.cwd_win.getwin(), COLOR_PAIR(3));
+            wprintw(fm.cwd_win.getwin(), "Empty");
+            wattroff(fm.cwd_win.getwin(), COLOR_PAIR(3));
+      }
+      else if (dir_files[size_t(selected)].type == FileType::Directory)
       {
          Err selected_err = get_dir_content(selected_dir_files, dir_files[size_t(selected)].name);
          if (selected_err == Err::PermissionDenied)
          {
             wattron(fm.content_win.getwin(), COLOR_PAIR(3));
             wprintw(fm.content_win.getwin(), "Permission denied");
+            wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
+         }
+         else if (selected_dir_files.size() == 0) {
+            wattron(fm.content_win.getwin(), COLOR_PAIR(3));
+            wprintw(fm.content_win.getwin(), "Empty");
             wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
          }
          else
@@ -63,6 +74,11 @@ int main()
          std::ifstream file{ dir_files[size_t(selected)].name };
          if (file.rdstate() == std::ios_base::failbit)
             fm.display_err("Couldn't read the file");
+         else if (file.peek() == std::ifstream::traits_type::eof()) {
+            wattron(fm.content_win.getwin(), COLOR_PAIR(3));
+            wprintw(fm.content_win.getwin(), "Empty");
+            wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
+         }
          else
          {
             string line{};
@@ -101,6 +117,12 @@ int main()
       }
       else if (input == KEY_RESIZE)
          fm.resize(stdscr);
+      // Trying to open when no directory exists in current location
+      // separated to reduce nesting
+      else if (input == KEY_RIGHT && dir_files.size() == 0) {
+         fm.erase_fm();
+         fm.display_err("No directory to open");
+      }
       else if (input == KEY_RIGHT)
       {
          fm.erase_fm();
