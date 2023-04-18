@@ -48,9 +48,9 @@ int main()
       // Get content of selected directory or file
       if (dir_files.size() == 0)
       {
-            wattron(fm.cwd_win.getwin(), COLOR_PAIR(3));
-            wprintw(fm.cwd_win.getwin(), "Empty");
-            wattroff(fm.cwd_win.getwin(), COLOR_PAIR(3));
+         wattron(fm.cwd_win.getwin(), COLOR_PAIR(3));
+         wprintw(fm.cwd_win.getwin(), "Empty");
+         wattroff(fm.cwd_win.getwin(), COLOR_PAIR(3));
       }
       else if (dir_files[size_t(selected)].type == FileType::Directory)
       {
@@ -61,7 +61,8 @@ int main()
             wprintw(fm.content_win.getwin(), "Permission denied");
             wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
          }
-         else if (selected_dir_files.size() == 0) {
+         else if (selected_dir_files.size() == 0)
+         {
             wattron(fm.content_win.getwin(), COLOR_PAIR(3));
             wprintw(fm.content_win.getwin(), "Empty");
             wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
@@ -74,7 +75,8 @@ int main()
          std::ifstream file{ dir_files[size_t(selected)].name };
          if (file.rdstate() == std::ios_base::failbit)
             fm.display_err("Couldn't read the file");
-         else if (file.peek() == std::ifstream::traits_type::eof()) {
+         else if (file.peek() == std::ifstream::traits_type::eof())
+         {
             wattron(fm.content_win.getwin(), COLOR_PAIR(3));
             wprintw(fm.content_win.getwin(), "Empty");
             wattroff(fm.content_win.getwin(), COLOR_PAIR(3));
@@ -119,7 +121,8 @@ int main()
          fm.resize(stdscr);
       // Trying to open when no directory exists in current location
       // separated to reduce nesting
-      else if (input == KEY_RIGHT && dir_files.size() == 0) {
+      else if (input == KEY_RIGHT && dir_files.size() == 0)
+      {
          fm.erase_fm();
          fm.display_err("No directory to open");
       }

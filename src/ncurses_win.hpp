@@ -4,10 +4,10 @@
 
 struct NcursesWin
 {
-public:
+ public:
    WINDOW* win;
 
-public:
+ public:
    NcursesWin() : win{ nullptr }
    {
    }

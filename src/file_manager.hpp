@@ -7,14 +7,14 @@
 
 struct FileManager
 {
-public:
+ public:
    NcursesWin title_win{};
    NcursesWin prev_win{};
    NcursesWin cwd_win{};
    NcursesWin content_win{};
    NcursesWin cmd_win{};
 
-public:
+ public:
    FileManager(WINDOW* container)
    {
       resize(container);

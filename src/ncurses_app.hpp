@@ -4,7 +4,7 @@
 
 struct NcursesApp
 {
-public:
+ public:
    NcursesApp()
    {
       initscr();
