@@ -9,4 +9,5 @@ Run this from the root directory of the project.
 mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
 ```
 # Demo
-[<img src="./demo.mp4" width="50%">]("Demo")
+https://github.com/blackpill0w/tfm/assets/103550574/377a3545-5f93-4fa8-8c0a-f266b372c0b8
+
