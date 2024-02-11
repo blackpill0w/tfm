@@ -7,8 +7,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wfloat-conversion -Wsign-
 
 # ncurses
 include(FindCurses)
+set(CURSES_NEED_NCURSES TRUE)
 set(CURSES_NEED_WIDE TRUE)
 find_package(Curses)
 
 add_executable(tfm src/main.cpp)
-target_link_libraries(tfm ${CURSES_LIBRARIES})
+target_link_libraries(tfm ${NCURSES_LIBRARIES})
