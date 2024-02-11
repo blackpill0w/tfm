@@ -71,7 +71,7 @@ std::string cmd_loop(WINDOW *cmd_win) {
       s.pop_back();
       wrefresh(cmd_win);
     }
-    else if ((isalpha(input) || input == ' ')) {
+    else if ((isprint(input) || input == ' ')) {
       waddch(cmd_win, unsigned(input));
       wrefresh(cmd_win);
       s += char(input);
