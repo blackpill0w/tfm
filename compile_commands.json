@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/blackpill0w/Code/c_c++/tfm/build_release",
+  "command": "/usr/bin/c++  -Wall -Wextra -Wfloat-conversion -Wsign-conversion -Wshadow -O3 -DNDEBUG -std=gnu++20 -o CMakeFiles/tfm.dir/src/main.cpp.o -c /home/blackpill0w/Code/c_c++/tfm/src/main.cpp",
+  "file": "/home/blackpill0w/Code/c_c++/tfm/src/main.cpp"
+}
+]
