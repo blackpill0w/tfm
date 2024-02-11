@@ -9,4 +9,4 @@ Run this from the root directory of the project.
 mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
 ```
 # Demo
-[<img src="./demo.webm" width="600" height="300"/>](./demo.webm)
+![./demo.mp4](./demo.mp4)
